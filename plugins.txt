@@ -1,0 +1,13 @@
+kubernetes
+kubernetes-client-api
+kubernetes-credentials
+maven-plugin
+pipeline-maven
+ssh-agent
+openshift-client
+openshift-login
+openshift-pipeline
+blueocean-pipeline-scm-api
+blueocean-pipeline-api-impl
+workflow-cps
+blueocean-web

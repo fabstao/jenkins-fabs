@@ -1,0 +1,49 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.36">
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <io.fabric8.jenkins.openshiftsync.BuildConfigProjectProperty plugin="openshift-sync@1.0.44">
+      <uid></uid>
+      <namespace></namespace>
+      <name></name>
+      <resourceVersion></resourceVersion>
+    </io.fabric8.jenkins.openshiftsync.BuildConfigProjectProperty>
+    <com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty plugin="gitlab-plugin@1.5.13">
+      <gitLabConnection></gitLabConnection>
+    </com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.79">
+    <script>
+node (&apos;slave&apos;) { 
+
+	stage (&apos;CI-IBM-test - Checkout&apos;) {
+ 	 checkout([$class: &apos;GitSCM&apos;, branches: [[name: &apos;*/dev&apos;]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: &apos;&apos;, url: &apos;http://gogs-gts-toks1.router.default.svc.cluster.local/fsalaman/gts-rh-ci&apos;]]]) 
+	}
+	stage (&apos;CI-IBM-test - Build&apos;) {
+ 			// Maven build step
+	withMaven { 
+ 			if(isUnix()) {
+ 				sh &quot;sh mvnw clean package &quot; 
+			} else { 
+ 				bat &quot;mvnw.bat clean package &quot; 
+			} 
+ 		}
+// Unable to convert a build step referring to &quot;sp.sd.nexusartifactuploader.IBMArtifactUploader&quot;. Please verify and convert manually if required. 
+	}
+	stage(&apos;Publish artifact&apos;){
+	    
+	    sshagent(credentials: [&apos;fsalamank&apos;]) {
+	            sh &apos;ls -l target&apos;
+                sh &apos;scp -o StrictHostKeyChecking=no target/*.war fsalaman@okd-gtsmex.ibm.cloud:~/artifacts&apos;
+            }
+	}
+}
+</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <authToken>gtsmex2</authToken>
+  <disabled>false</disabled>
+</flow-definition>
