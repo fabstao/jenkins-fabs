@@ -19,7 +19,7 @@
 node (&apos;slave&apos;) { 
 
 	stage (&apos;CI-IBM-test - Checkout&apos;) {
- 	 checkout([$class: &apos;GitSCM&apos;, branches: [[name: &apos;*/dev&apos;]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: &apos;&apos;, url: &apos;http://gogs-gts-toks1.router.default.svc.cluster.local/fsalaman/gts-rh-ci&apos;]]]) 
+ 	 checkout([$class: &apos;GitSCM&apos;, branches: [[name: &apos;*/dev&apos;]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: &apos;&apos;, url: &apos;http://gitlab-gts.eph.com/saruman/gts-rh-ci&apos;]]]) 
 	}
 	stage (&apos;CI-IBM-test - Build&apos;) {
  			// Maven build step
